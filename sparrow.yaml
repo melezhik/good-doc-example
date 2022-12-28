@@ -20,11 +20,22 @@ tasks:
     depends:
       -
         name: multi-versions
+    followup:
+      -
+        name: good-doc
+  -
+    name: good-doc
+    plugin: good-doc
+    config:
+      path: source/README.md
+      rakudo_path: "{{ CWD }}/rakudo-moar-2022.12-01-linux-x86_64-gcc"
   -
     name: multi-versions
     language: Raku
     config:
       list:
+        # - 2022.04
+        # - 2022.07
         - 2022.12
     code: |
       my @state;
@@ -65,6 +76,8 @@ tasks:
           raku --version
           zef --version
           
+          cd source/
+          zef install . --deps-only --test-depends --build-depends --/test -to=home         
           /usr/bin/time -f "%E real,%U user,%S sys | CPU Percentage: %P" -o "${cache_root_dir}/${version}_time" \
           touch "${cache_root_dir}/${version}_ok"
           
